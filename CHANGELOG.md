@@ -1,3 +1,13 @@
+<a name="0.3.1"></a>
+## [0.3.1](https://github.com/forestryio/create-observable-thunk/compare/v0.3.0...v0.3.1) (2017-07-13)
+
+
+### Performance Improvements
+
+* **actions scope:** before, success, and failure actions are asserted to be arrays outside of thunk, to prevent unecessary checks ([63ed0cd](https://github.com/forestryio/create-observable-thunk/commit/63ed0cd))
+
+
+
 <a name="0.3.0"></a>
 # [0.3.0](https://github.com/forestryio/create-observable-thunk/compare/v0.2.0...v0.3.0) (2017-07-13)
 
