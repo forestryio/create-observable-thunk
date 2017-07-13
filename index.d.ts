@@ -1,52 +1,54 @@
-import { Middleware, MiddlewareAPI } from 'redux';
-import { Observable, ObservableInput } from 'rxjs/Observable';
-import { Scheduler } from 'rxjs/Scheduler';
-import { Operator } from 'rxjs/Operator';
+import { Observable } from 'rxjs/Observable'
 
-export declare class ActionsObservable<T> extends Observable<T> {
+/**
+ * 
+ */
+interface ActionCreator<Input> { 
+  ():any 
+  (arg:Input):any 
+  (arg:Input, date:Date):any 
+}
+
+type ActionCreators<Input> = ActionCreator<Input> | ActionCreator<Input>[] | Function | Function[]
+
+interface Options<Input, Response> {
   /**
-   * Just like RxJS itself, we can't actually make this method always type-safe
-   * because we would need non-final position spread params e.g.
-   *   `static of<T>(...items: T, scheduler?: Scheduler): ActionsObservable<T>`
-   * which isn't possible in either JavaScript or TypeScript. So instead, we
-   * provide safe typing for up to 6 items, following by a scheduler.
+   * An Observable returning function
    */
-  static of<T>(item1: T, scheduler?: Scheduler): ActionsObservable<T>;
-  static of<T>(item1: T, item2: T, scheduler?: Scheduler): ActionsObservable<T>;
-  static of<T>(item1: T, item2: T, item3: T, scheduler?: Scheduler): ActionsObservable<T>;
-  static of<T>(item1: T, item2: T, item3: T, item4: T, scheduler?: Scheduler): ActionsObservable<T>;
-  static of<T>(item1: T, item2: T, item3: T, item4: T, item5: T, scheduler?: Scheduler): ActionsObservable<T>;
-  static of<T>(item1: T, item2: T, item3: T, item4: T, item5: T, item6: T, scheduler?: Scheduler): ActionsObservable<T>;
-  static of<T>(...array: Array<T | Scheduler>): ActionsObservable<T>;
+  method(input:Input): Observable<Response>
 
-  static from<T>(ish: ObservableInput<T>, scheduler?: Scheduler): ActionsObservable<T>;
-  static from<T, R>(ish: ArrayLike<T>, scheduler?: Scheduler): ActionsObservable<R>;
+  /**
+   * OPTIONAL: An ActionCreator or list of ActionCreators to be dispatched before the Observable is created.
+   */
+  before?:ActionCreators<Input>
 
-  constructor(input$: Observable<T>);
-  lift<R>(operator: Operator<T, R>): ActionsObservable<R>;
-  ofType(...key: string[]): ActionsObservable<T>;
-  ofType(...key: any[]): ActionsObservable<T>;
+  /**
+   * OPTIONAL: An ActionCreator or list of ActionCreators to be dispatched if the Observable succeeds.
+   * 
+   */
+  success?:ActionCreators<Response>
+
+  /**
+   * OPTIONAL: An ActionCreator or list of ActionCreators to be dispatched if the Observable fails.
+   */
+  failure?: ActionCreators<any>
 }
 
-export declare interface Epic<T, S> {
-  (action$: ActionsObservable<T>, store: MiddlewareAPI<S>): Observable<T>;
+interface ThunkCreator<I, R> {
+  (input?: I): Thunk<R>
 }
 
-export interface EpicMiddleware<T, S> extends Middleware {
-  replaceEpic(nextEpic: Epic<T, S>): void;
+interface Thunk<R> {
+  (dispatch: Dispatch, getState: GetState): Observable<R>
 }
 
-interface Adapter {
-  input: (input$: Observable<any>) => any;
-  output: (output$: any) => Observable<any>;
+interface Dispatch {
+  (action: any): any
+}
+interface GetState {
+  (): any
 }
 
-interface Options {
-  adapter?: Adapter;
-  dependencies?: { [key: string]: any } | any;
-}
+export declare function createObservableThunk(options: Options<any, any>): ThunkCreator<any, any>
+export declare function createObservableThunk<I, R>(options: Options<I, R>): ThunkCreator<I, R>
 
-export declare function createEpicMiddleware<T, S>(rootEpic: Epic<T, S>, options?: Options): EpicMiddleware<T, S>;
-
-export declare function combineEpics<T, S>(...epics: Epic<T, S>[]): Epic<T, S>;
-export declare function combineEpics<E>(...epics: E[]): E;
