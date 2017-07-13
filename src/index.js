@@ -1,13 +1,13 @@
 import { Observable } from "rxjs/Observable"
 
 export function createObservableThunk(options) {
+  const { method, before, success, failure } = options
+
+  const beforeActions = ensureArray(before)
+  const successActions = ensureArray(success)
+  const failureActions = ensureArray(failure)
+
   return function thunkCreator(input) {
-    let { method, before, success, failure } = options
-
-    let beforeActions = ensureArray(before)
-    let successActions = ensureArray(success)
-    let failureActions = ensureArray(failure)
-
     return function thunk(dispatch, getState) {
       dispatchMany(beforeActions, input)
 
