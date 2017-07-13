@@ -9,8 +9,8 @@
     "build": "npm run build:es && npm run build:cjs && npm run build:umd && npm run build:umd:min",
     "build:es": "gulp build:es",
     "build:cjs": "babel src -d lib/cjs",
-    "build:umd": "cross-env NODE_ENV=development webpack src/index.js dist/redux-observable.js",
-    "build:umd:min": "cross-env NODE_ENV=production webpack src/index.js dist/redux-observable.min.js",
+    "build:umd": "cross-env NODE_ENV=development webpack src/index.js dist/create-observable-thunk.js",
+    "build:umd:min": "cross-env NODE_ENV=production webpack src/index.js dist/create-observable-thunk.min.js",
     "build:tests": "rm -rf temp && babel test -d temp",
     "clean": "rimraf lib temp dist",
     "check": "npm run lint && npm run test",
@@ -19,9 +19,9 @@
     "shipit": "npm run clean && npm run build && npm run lint && npm test && scripts/preprepublish.sh && npm publish",
     "docs:clean": "rimraf _book",
     "docs:prepare": "gitbook install",
-    "docs:build": "npm run docs:prepare && gitbook build -g redux-observable/redux-observable && cp logo/favicon.ico _book/gitbook/images",
+    "docs:build": "npm run docs:prepare && gitbook build -g create-observable-thunk/create-observable-thunk && cp logo/favicon.ico _book/gitbook/images",
     "docs:watch": "gitbook serve",
-    "docs:publish": "npm run docs:clean && npm run docs:build && cp CNAME _book && cd _book && git init && git commit --allow-empty -m 'update book' && git checkout -b gh-pages && touch .nojekyll && git add . && git commit -am 'update book' && git push git@github.com:redux-observable/redux-observable gh-pages --force"
+    "docs:publish": "npm run docs:clean && npm run docs:build && cp CNAME _book && cd _book && git init && git commit --allow-empty -m 'update book' && git checkout -b gh-pages && touch .nojekyll && git add . && git commit -am 'update book' && git push git@github.com:forestryio/create-observable-thunk gh-pages --force"
   },
   "typings": "./index.d.ts",
   "files": [
@@ -33,7 +33,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/redux-observable/redux-observable.git"
+    "url": "git+https://github.com/forestryio/create-observable-thunk.git"
   },
   "keywords": [
     "Rx",
@@ -59,7 +59,7 @@
   "homepage": "https://github.com/forestryio/create-observable-thunk#README.md",
   "peerDependencies": {
     "redux": "3.*",
-    "redux-thunk":"^2.2.0",
+    "redux-thunk": "^2.2.0",
     "rxjs": "^5.0.0"
   },
   "devDependencies": {
@@ -92,7 +92,7 @@
     "json-server": "^0.10.0",
     "mocha": "^3.0.1",
     "redux": "^3.5.2",
-    "redux-thunk":"^2.2.0",
+    "redux-thunk": "^2.2.0",
     "rimraf": "^2.5.4",
     "rxjs": "^5.0.0",
     "sinon": "^2.3.3",
