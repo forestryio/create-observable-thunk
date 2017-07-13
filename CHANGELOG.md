@@ -1,3 +1,8 @@
+<a name="0.3.5"></a>
+## [0.3.5](https://github.com/forestryio/create-observable-thunk/compare/v0.3.1...v0.3.5) (2017-07-13)
+
+
+
 <a name="0.3.1"></a>
 ## [0.3.1](https://github.com/forestryio/create-observable-thunk/compare/v0.3.0...v0.3.1) (2017-07-13)
 
