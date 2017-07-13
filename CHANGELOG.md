@@ -1,3 +1,21 @@
+<a name="0.2.0"></a>
+# 0.2.0 (2017-07-13)
+
+
+### Bug Fixes
+
+* **package.json:** Fixed some urls and names ([22cd895](https://github.com/forestryio/create-observable-thunk/commit/22cd895))
+* **package.json:** Typo in devDependencies ([861726a](https://github.com/forestryio/create-observable-thunk/commit/861726a))
+* **README:** Removed redux-observable content ([cfa0c46](https://github.com/forestryio/create-observable-thunk/commit/cfa0c46))
+
+
+### Features
+
+* **createObservableThunk:** copied over from forestry app ([4039937](https://github.com/forestryio/create-observable-thunk/commit/4039937))
+* **typings:** add Typescript typings for library ([8087968](https://github.com/forestryio/create-observable-thunk/commit/8087968))
+
+
+
 <a name="0.1.0"></a>
 # [0.14.0](https://github.com/redux-observable/redux-observable/compare/v0.13.0...v0.14.0) (2017-03-02)
 
