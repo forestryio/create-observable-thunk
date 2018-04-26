@@ -21,5 +21,20 @@ describe("create-observable-thunk", () => {
 
       expect(observable).toBeInstanceOf(Observable)
     })
+    describe("before", () => {
+      const DUMMY_ACTiON = { type: "dummy-action" }
+
+      it("should dispatch a sole-action", () => {
+        const dummyAction = jest.fn(() => DUMMY_ACTiON)
+        const aThunk = createObservableThunk({
+          method: () => Observable.of(),
+          before: dummyAction
+        })
+
+        dispatch(aThunk({}))
+
+        expect(dispatch).toBeCalledWith(DUMMY_ACTiON)
+      })
+    })
   })
 })
