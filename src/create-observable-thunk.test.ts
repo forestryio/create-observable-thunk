@@ -23,6 +23,7 @@ describe("create-observable-thunk", () => {
     })
     describe("before", () => {
       const DUMMY_ACTiON = { type: "dummy-action" }
+      const DUMMY_ACTiON_2 = { type: "dummy-action-2" }
 
       it("should dispatch a sole-action", () => {
         const dummyAction = jest.fn(() => DUMMY_ACTiON)
@@ -35,6 +36,23 @@ describe("create-observable-thunk", () => {
 
         expect(dispatch).toBeCalledWith(DUMMY_ACTiON)
       })
+
+      it("should dispatch two given actions", () => {
+        const dummyAction = jest.fn(() => DUMMY_ACTiON)
+        const dummyAction2 = jest.fn(() => DUMMY_ACTiON_2)
+        const aThunk = createObservableThunk({
+          method: () => Observable.of(),
+          before: [dummyAction2, dummyAction]
+        })
+
+        dispatch(aThunk({}))
+
+        expect(dummyAction).toHaveBeenCalled()
+        expect(dispatch).toHaveBeenCalledWith(DUMMY_ACTiON)
+        expect(dummyAction2).toHaveBeenCalled()
+        expect(dispatch).toHaveBeenCalledWith(DUMMY_ACTiON_2)
+      })
+
     })
   })
 })
