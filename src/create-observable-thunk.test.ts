@@ -53,6 +53,21 @@ describe("create-observable-thunk", () => {
         expect(dispatch).toHaveBeenCalledWith(DUMMY_ACTiON_2)
       })
 
+      it("should dispatch many two given actions even if method errors", () => {
+        const dummyAction = jest.fn(() => DUMMY_ACTiON)
+        const dummyAction2 = jest.fn(() => DUMMY_ACTiON_2)
+        const aThunk = createObservableThunk({
+          method: () => Observable.fromPromise(Promise.reject("err")),
+          before: [dummyAction2, dummyAction]
+        })
+
+        dispatch(aThunk({}))
+
+        expect(dummyAction).toHaveBeenCalled()
+        expect(dispatch).toHaveBeenCalledWith(DUMMY_ACTiON)
+        expect(dummyAction2).toHaveBeenCalled()
+        expect(dispatch).toHaveBeenCalledWith(DUMMY_ACTiON_2)
+      })
     })
   })
 })
