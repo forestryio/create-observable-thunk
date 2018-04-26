@@ -38,17 +38,17 @@
   },
   "homepage": "https://github.com/forestryio/create-observable-thunk#README.md",
   "devDependencies": {
-    "redux": "4.0.0",
+    "redux": "^3.0.0 || ^4.0.0",
     "redux-thunk": "^2.2.0",
-    "rxjs": "^5.*",
+    "rxjs": "^5.0.0 || ^6.0.0",
     "type-scripts": "1.2.0",
     "typescript": "^2.8.3"
   },
   "dependencies": {},
   "peerDependencies": {
-    "redux": "4.0.0",
-    "redux-thunk": "^2.2.0",
-    "rxjs": "^5"
+    "redux": "^3.0.0 || ^4.0.0",
+    "redux-thunk": "^2.0.0",
+    "rxjs": "^5.0.0 || ^6.0.0"
   },
   "scripts": {
     "build": "type-scripts-build",
