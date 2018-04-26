@@ -1,7 +1,5 @@
-npm-debug.log
-node_modules
-lib
-temp
-dist
-_book
-typings
+build/
+node_modules/
+.DS_STORnE
+*_cache/
+.rpt2_cache
