@@ -1,73 +1,74 @@
-import { Observable } from "rxjs/Observable";
-import "rxjs/add/observable/of";
-import "rxjs/add/operator/do";
-import "rxjs/add/operator/catch";
-import "rxjs/add/operator/share";
+import { Observable } from "rxjs/Observable"
+import "rxjs/add/observable/of"
+import "rxjs/add/operator/do"
+import "rxjs/add/operator/catch"
+import "rxjs/add/operator/share"
+import { ensureArray } from "./ensure-array"
 /**
  *
  */
 export interface ActionCreator<Input> {
-  (): any;
-  (arg: Input): any;
-  (arg: Input, date: Date): any;
+  (): any
+  (arg: Input): any
+  (arg: Input, date: Date): any
 }
 
 export type ActionCreators<Input> =
   | ActionCreator<Input>
   | ActionCreator<Input>[]
   | Function
-  | Function[];
+  | Function[]
 
 export interface Options<Input, Response> {
   /**
    * An Observable returning function
    */
-  method(input: Input): Observable<Response>;
+  method(input: Input): Observable<Response>
 
   /**
    * OPTIONAL: An ActionCreator or list of ActionCreators to be dispatched before the Observable is created.
    */
-  before?: ActionCreators<Input>;
+  before?: ActionCreators<Input>
 
   /**
    * OPTIONAL: An ActionCreator or list of ActionCreators to be dispatched if the Observable succeeds.
    *
    */
-  success?: ActionCreators<Response>;
+  success?: ActionCreators<Response>
 
   /**
    * OPTIONAL: An ActionCreator or list of ActionCreators to be dispatched if the Observable fails.
    */
-  failure?: ActionCreators<any>;
+  failure?: ActionCreators<any>
 }
 
 interface ThunkCreator<I, R> {
-  (input?: I): Thunk<R>;
+  (input?: I): Thunk<R>
 }
 
 interface Thunk<R> {
-  (dispatch: Dispatch, getState: GetState): Observable<R>;
+  (dispatch: Dispatch, getState: GetState): Observable<R>
 }
 
 interface Dispatch {
-  (action: any): any;
+  (action: any): any
 }
 interface GetState {
-  (): any;
+  (): any
 }
 
 export function createObservableThunk<I = any, R = any>(
   options: Options<I, R>
 ) {
-  const { method, before, success, failure } = options;
+  const { method, before, success, failure } = options
 
-  const beforeActions = ensureArray(before);
-  const successActions = ensureArray(success);
-  const failureActions = ensureArray(failure);
+  const beforeActions = ensureArray(before)
+  const successActions = ensureArray(success)
+  const failureActions = ensureArray(failure)
 
   return function thunkCreator(input: I) {
     return function thunk(dispatch: any, getState: () => any) {
-      dispatchMany<I>(beforeActions, input);
+      dispatchMany<I>(beforeActions, input)
 
       let o = method(input)
         .do(response => dispatchMany(successActions, response))
@@ -75,40 +76,28 @@ export function createObservableThunk<I = any, R = any>(
           error =>
             dispatchMany(failureActions, error) || Observable.of({ error })
         )
-        .share();
+        .share()
 
-      o.subscribe();
+      o.subscribe()
 
-      return o;
+      return o
 
       function dispatchMany<Payload = any>(
         actionCreators: any[],
         payload: Payload
       ) {
-        let date = new Date();
+        let date = new Date()
         actionCreators.forEach(callback => {
-          let action = callback(payload, date);
+          let action = callback(payload, date)
           if (action) {
-            dispatch(action);
+            dispatch(action)
           } else {
             console.error(
               `Invalid Action Creator ${callback.name} returned undefined`
-            );
+            )
           }
-        });
+        })
       }
-    };
-  };
-}
-
-function ensureArray(callbacks: Array<Function> | Function) {
-  if (Array.isArray(callbacks)) {
-    return callbacks;
+    }
   }
-
-  if (callbacks) {
-    return [callbacks];
-  }
-
-  return [];
 }
