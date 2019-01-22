@@ -1,5 +1,5 @@
 import { createObservableThunk } from "./create-observable-thunk"
-import { Observable } from "rxjs"
+import { Observable, of, from } from "rxjs"
 
 describe("create-observable-thunk", () => {
   let dispatch, getState
@@ -15,7 +15,7 @@ describe("create-observable-thunk", () => {
 
   describe("dispatching", () => {
     it("should return an observable", () => {
-      const aThunk = createObservableThunk({ method: () => Observable.of() })
+      const aThunk = createObservableThunk({ method: () => of() })
 
       const observable = dispatch(aThunk({}))
 
@@ -28,7 +28,7 @@ describe("create-observable-thunk", () => {
       it("should dispatch a sole-action", () => {
         const dummyAction = jest.fn(() => DUMMY_ACTiON)
         const aThunk = createObservableThunk({
-          method: () => Observable.of(),
+          method: () => of(),
           before: dummyAction
         })
 
@@ -41,7 +41,7 @@ describe("create-observable-thunk", () => {
         const dummyAction = jest.fn(() => DUMMY_ACTiON)
         const dummyAction2 = jest.fn(() => DUMMY_ACTiON_2)
         const aThunk = createObservableThunk({
-          method: () => Observable.of(),
+          method: () => of(),
           before: [dummyAction2, dummyAction]
         })
 
@@ -57,7 +57,7 @@ describe("create-observable-thunk", () => {
         const dummyAction = jest.fn(() => DUMMY_ACTiON)
         const dummyAction2 = jest.fn(() => DUMMY_ACTiON_2)
         const aThunk = createObservableThunk({
-          method: () => Observable.fromPromise(Promise.reject("err")),
+          method: () => from(Promise.reject("err")),
           before: [dummyAction2, dummyAction]
         })
 

@@ -1,9 +1,6 @@
-import { Observable } from "rxjs/Observable"
-import "rxjs/add/observable/of"
-import "rxjs/add/operator/do"
-import "rxjs/add/operator/catch"
-import "rxjs/add/operator/share"
 import { ensureArray } from "./ensure-array"
+import { Observable, of } from "rxjs"
+import { tap, catchError, share } from "rxjs/operators"
 /**
  *
  */
@@ -70,13 +67,14 @@ export function createObservableThunk<I = any, R = any>(
     return function thunk(dispatch: any, getState: () => any) {
       dispatchMany<I>(beforeActions, input)
 
-      let o = method(input)
-        .do(response => dispatchMany(successActions, response))
-        .catch(
-          error =>
-            dispatchMany(failureActions, error) || Observable.of({ error })
-        )
-        .share()
+      let o = method(input).pipe(
+        tap(response => dispatchMany(successActions, response)),
+        catchError(error => {
+          dispatchMany(failureActions, error)
+          return of({ error })
+        }),
+        share()
+      )
 
       o.subscribe()
 
